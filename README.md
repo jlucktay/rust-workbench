@@ -4,10 +4,6 @@ Messing around with Rust!
 
 I would like to [learn some Rust](https://www.rust-lang.org/learn).
 
-## First stop: `rustlings`
+## First stop: ~~`rustlings`~~
 
-<https://github.com/rust-lang/rustlings>
-
-```shell
-curl -L https://git.io/rustlings | bash
-```
+~~<https://github.com/rust-lang/rustlings>~~
