@@ -1,4 +1,7 @@
-#![allow(unused)]
+use std::{
+	fs::File,
+	io::{BufRead, BufReader},
+};
 
 use clap::Parser;
 
@@ -12,18 +15,30 @@ struct Cli {
 	path: std::path::PathBuf,
 }
 
-fn main() {
+fn main() -> std::io::Result<()> {
 	let args = Cli::parse();
 
 	// Exercise for the reader: Make this program output its arguments!
 	println!("pattern: '{}'", args.pattern);
 	println!("path:    '{}'", args.path.display());
 
-	let content = std::fs::read_to_string(&args.path).expect("could not read file");
+	/*
+	Exercise for the reader:
+	This is not the best implementation:
+	It will read the whole file into memory – however large the file may be.
+	Find a way to optimize it!
+	(One idea might be to use a BufReader instead of read_to_string().)
+	*/
+	let file = File::open(args.path)?;
+	let reader = BufReader::new(file);
 
-	for line in content.lines() {
+	for line_result in reader.lines() {
+		let line = line_result.unwrap();
+
 		if line.contains(&args.pattern) {
 			println!("{}", line);
 		}
 	}
+
+	Ok(())
 }
