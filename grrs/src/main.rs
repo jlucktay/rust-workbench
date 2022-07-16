@@ -55,3 +55,19 @@ pub fn answer() -> i32 {
 fn check_answer_validity() {
 	assert_eq!(answer(), 42);
 }
+
+#[cfg(test)]
+mod tests {
+	#[test]
+	fn it_works() {
+		let result = 2 + 2;
+		assert_eq!(result, 4);
+	}
+}
+
+#[test]
+fn find_a_match() {
+	let mut output = Vec::new();
+	let _result = grrs::find_matches("lorem ipsum\ndolor sit amet", "lorem", &mut output);
+	assert_eq!(output, b"lorem ipsum\n");
+}
