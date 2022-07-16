@@ -57,6 +57,6 @@ mod tests {
 #[test]
 fn find_a_match() {
 	let mut output = Vec::new();
-	let _result = jlucktay_grrs::find_matches("lorem ipsum\ndolor sit amet", "lorem", &mut output);
+	let _result = jlucktay_grrs::_find_matches("lorem ipsum\ndolor sit amet", "lorem", &mut output);
 	assert_eq!(output, b"lorem ipsum\n");
 }

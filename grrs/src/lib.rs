@@ -1,6 +1,6 @@
 use clap::Parser;
 
-pub fn find_matches(
+pub fn _find_matches(
 	content: &str,
 	pattern: &str,
 	mut writer: impl std::io::Write,
