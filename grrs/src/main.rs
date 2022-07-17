@@ -1,6 +1,6 @@
 use std::{
 	fs::File,
-	io::{BufRead, BufReader},
+	io::{self, BufRead, BufReader, Write},
 };
 
 use clap::Parser;
@@ -25,11 +25,16 @@ fn main() -> std::io::Result<()> {
 	let file = File::open(args.path)?;
 	let reader = BufReader::new(file);
 
+	// get the global stdout entity, and lock it
+	let stdout = io::stdout();
+	let mut locked = stdout.lock();
+
+	// write matching lines out to the locked reference
 	for line_result in reader.lines() {
-		let line = line_result.unwrap();
+		let line = line_result.unwrap_or_default();
 
 		if line.contains(&args.pattern) {
-			println!("{}", line);
+			writeln!(locked, "{}", line)?;
 		}
 	}
 
