@@ -9,7 +9,7 @@ fn main() -> std::io::Result<()> {
 	let cmd = cli::Cli::command();
 
 	let man = clap_mangen::Man::new(cmd);
-	let mut buffer: Vec<u8> = Default::default();
+	let mut buffer: Vec<u8> = std::vec::Vec::default();
 	man.render(&mut buffer)?;
 
 	std::fs::write(out_dir.join("jlucktay-grrs.1"), buffer)?;

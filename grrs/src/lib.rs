@@ -1,5 +1,8 @@
 use clap::Parser;
 
+/// # Errors
+///
+/// Will return `Err` if `std::io::Write` has a problem.
 pub fn _find_matches(
 	content: &str,
 	pattern: &str,
@@ -7,7 +10,7 @@ pub fn _find_matches(
 ) -> std::io::Result<()> {
 	for line in content.lines() {
 		if line.contains(pattern) {
-			writeln!(writer, "{}", line)?
+			writeln!(writer, "{}", line)?;
 		}
 	}
 

@@ -41,7 +41,8 @@ fn main() -> std::io::Result<()> {
 	Ok(())
 }
 
-pub fn answer() -> i32 {
+#[must_use = "the Answer to the Ultimate Question of Life, the Universe, and Everything"]
+pub const fn answer() -> i32 {
 	42
 }
 
