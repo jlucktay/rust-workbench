@@ -23,7 +23,8 @@ impl ThreadPool {
 	/// # Panics
 	///
 	/// The `new` function will panic if the size is zero.
-	pub fn new(size: usize) -> ThreadPool {
+	#[must_use = "calling a constructor and throwing away its output"]
+	pub fn new(size: usize) -> Self {
 		assert!(size > 0);
 
 		let (sender, receiver) = mpsc::channel();
@@ -36,7 +37,7 @@ impl ThreadPool {
 			workers.push(Worker::new(id, Arc::clone(&receiver)));
 		}
 
-		ThreadPool { workers, sender }
+		Self { workers, sender }
 	}
 
 	pub fn execute<F>(&self, f: F)
@@ -75,7 +76,7 @@ struct Worker {
 }
 
 impl Worker {
-	fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) -> Worker {
+	fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) -> Self {
 		let thread = thread::spawn(move || loop {
 			let message = receiver.lock().unwrap().recv().unwrap();
 
@@ -93,7 +94,7 @@ impl Worker {
 			}
 		});
 
-		Worker {
+		Self {
 			id,
 			thread: Some(thread),
 		}
