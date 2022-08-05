@@ -6,25 +6,28 @@ use std::net::TcpStream;
 use std::thread;
 use std::time::Duration;
 
-fn main() {
-	let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+fn main() -> Result<(), std::io::Error> {
+	let listener = TcpListener::bind("127.0.0.1:7878")?;
 	let pool = ThreadPool::new(4);
 
 	for stream in listener.incoming() {
-		let stream = stream.unwrap();
+		let stream = stream?;
 
-		pool.execute(|| {
-			handle_connection(stream);
+		pool.execute(|| match handle_connection(stream) {
+			Ok(_) => (),
+			Err(e) => panic!("Had a problem handling this connection: {}", e),
 		});
 	}
 
 	println!("Shutting down.");
+
+	Ok(())
 }
 
-fn handle_connection(mut stream: TcpStream) {
+fn handle_connection(mut stream: TcpStream) -> Result<(), std::io::Error> {
 	let mut buffer = [0; 1024];
 
-	stream.read_exact(&mut buffer).unwrap();
+	_ = stream.read(&mut buffer)?;
 
 	let get = b"GET / HTTP/1.1\r\n";
 	let sleep = b"GET /sleep HTTP/1.1\r\n";
@@ -38,7 +41,7 @@ fn handle_connection(mut stream: TcpStream) {
 		("HTTP/1.1 404 NOT FOUND", "404.html")
 	};
 
-	let contents = fs::read_to_string(filename).unwrap();
+	let contents = fs::read_to_string(filename)?;
 
 	let response = format!(
 		"{}\r\nContent-Length: {}\r\n\r\n{}",
@@ -47,6 +50,8 @@ fn handle_connection(mut stream: TcpStream) {
 		contents
 	);
 
-	stream.write_all(response.as_bytes()).unwrap();
-	stream.flush().unwrap();
+	stream.write_all(response.as_bytes())?;
+	stream.flush()?;
+
+	Ok(())
 }
