@@ -1,3 +1,5 @@
+#![forbid(unsafe_code)]
+
 use clap::CommandFactory;
 
 #[path = "src/lib.rs"]
