@@ -10,7 +10,7 @@ pub struct ThreadPool {
 
 type Job = Box<dyn FnOnce() + Send + 'static>;
 
-enum Message {
+pub enum Message {
 	NewJob(Job),
 	Terminate,
 }
@@ -40,13 +40,18 @@ impl ThreadPool {
 		Self { workers, sender }
 	}
 
-	pub fn execute<F>(&self, f: F)
+	/// # Errors
+	///
+	/// The `execute` function may error when calling `std::sync::mpsc::Sender::send`.
+	pub fn execute<F>(&self, f: F) -> Result<(), std::sync::mpsc::SendError<Message>>
 	where
 		F: FnOnce() + Send + 'static,
 	{
 		let job = Box::new(f);
 
-		self.sender.send(Message::NewJob(job)).unwrap();
+		self.sender.send(Message::NewJob(job))?;
+
+		Ok(())
 	}
 }
 
