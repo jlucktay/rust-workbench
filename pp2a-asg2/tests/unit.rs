@@ -8,7 +8,15 @@ const NAMES: [&str; 8] = [
 fn driver_ord_array_linear() {
 	assert_eq!(NAMES.len(), 8);
 
-	let make_result = OrderedLinearArray::make_collection(NAMES.as_slice());
+	println!(
+		"Current Implementation based on: {}",
+		std::any::type_name::<OrderedLinearArray>()
+	);
 
-	assert!(make_result.is_ok());
+	let mut ola = OrderedLinearArray::default();
+	assert_eq!(ola.size_collection(), 0);
+
+	for name in NAMES {
+		ola.add_collection(name);
+	}
 }
