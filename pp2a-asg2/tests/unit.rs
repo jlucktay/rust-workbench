@@ -19,4 +19,6 @@ fn driver_ord_array_linear() {
 	for name in NAMES {
 		ola.add_collection(name);
 	}
+
+	assert_eq!(ola.size_collection(), 8);
 }

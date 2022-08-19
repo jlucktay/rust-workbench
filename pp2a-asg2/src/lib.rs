@@ -54,7 +54,7 @@ impl WordCollection for OrderedLinearArray {
 
 	/// Returns the number of words in the `WordCollection`.
 	fn size_collection(&self) -> usize {
-		todo!()
+		self.words.len()
 	}
 
 	/// Prints the contents of the `WordCollection` to standard output.
