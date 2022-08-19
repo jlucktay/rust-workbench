@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 pub trait WordCollection {
 	fn make_collection() -> Self;
 
@@ -7,7 +9,7 @@ pub trait WordCollection {
 
 	fn size_collection(&self) -> usize;
 
-	fn display_collection();
+	fn display_collection(&self);
 }
 
 const WC_SIZE: usize = 250_000;
@@ -52,8 +54,8 @@ impl WordCollection for OrderedLinearArray {
 	}
 
 	/// Prints the contents of the `WordCollection` to standard output.
-	fn display_collection() {
-		todo!()
+	fn display_collection(&self) {
+		println!("{}", self);
 	}
 }
 
@@ -68,5 +70,16 @@ impl OrderedLinearArray {
 		Self {
 			words: Vec::with_capacity(cap.unwrap_or(WC_SIZE)),
 		}
+	}
+}
+
+/// Implementing Display automatically gives you `.to_string()` and a bunch of other goodies.
+impl Display for OrderedLinearArray {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		for (i, word) in self.words.iter().enumerate() {
+			f.write_fmt(format_args!("Element #{}:\t{}\n", i + 1, word))?;
+		}
+
+		Ok(())
 	}
 }
