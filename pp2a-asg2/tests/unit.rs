@@ -21,4 +21,7 @@ fn driver_ord_array_linear() {
 	}
 
 	assert_eq!(ola.size_collection(), 8);
+
+	assert!(ola.search_collection("Sathish"));
+	assert!(!ola.search_collection("Kratos"));
 }

@@ -3,16 +3,11 @@ pub trait WordCollection {
 
 	fn add_collection(&mut self, word: &str);
 
-	/// # Errors
-	fn search_collection(&self, word: &str) -> Result<(), WordCollectionError>;
+	fn search_collection(&self, word: &str) -> bool;
 
 	fn size_collection(&self) -> usize;
 
 	fn display_collection();
-}
-
-pub enum WordCollectionError {
-	Failure,
 }
 
 const WC_SIZE: usize = 250_000;
@@ -34,7 +29,6 @@ impl WordCollection for OrderedLinearArray {
 	}
 
 	/// Adds the word to the `WordCollection`.
-	/// It returns `WordCollectionError::Failure` if there is a problem.
 	/// The word is added so that the `WordCollection` is in alphabetical order.
 	fn add_collection(&mut self, word: &str) {
 		let i = self
@@ -48,8 +42,8 @@ impl WordCollection for OrderedLinearArray {
 
 	/// Searches for the word in the `WordCollection`.
 	/// This utilises a linear search algorithm.
-	fn search_collection(&self, _word: &str) -> Result<(), WordCollectionError> {
-		todo!()
+	fn search_collection(&self, word: &str) -> bool {
+		self.words.iter().any(|s| s.as_str() == word)
 	}
 
 	/// Returns the number of words in the `WordCollection`.
