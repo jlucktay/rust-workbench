@@ -1,4 +1,4 @@
-use pp2a_asg2::{OrderedLinearArray, WordCollection};
+use pp2a_asg2::{ord_array_linear::OrderedLinearArray, WordCollection};
 
 const NAMES: [&str; 8] = [
 	"Peter", "Sathish", "Wade", "Don", "Indrajit", "Rahul", "Sam", "Kevin",
