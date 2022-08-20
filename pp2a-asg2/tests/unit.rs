@@ -1,5 +1,6 @@
 use pp2a_asg2::{
-	ord_array_binary::OrderedBinaryArray, ord_array_linear::OrderedLinearArray, WordCollection,
+	binary::OrderedBinaryArray, linear::OrderedLinearArray, linked::OrderedLinkedList,
+	tree::UnbalancedBinarySearchTree, WordCollection,
 };
 
 const NAMES: [&str; 8] = [
@@ -22,9 +23,15 @@ Element #8:	Wade
 
 	let ord_linear = OrderedLinearArray::default();
 	let ord_binary = OrderedBinaryArray::default();
+	let ord_linked = OrderedLinkedList::make_collection();
+	let bin_tree = UnbalancedBinarySearchTree::make_collection();
 
-	let boxed_collections: Vec<Box<dyn WordCollection>> =
-		vec![Box::new(ord_linear), Box::new(ord_binary)];
+	let boxed_collections: Vec<Box<dyn WordCollection>> = vec![
+		Box::new(ord_linear),
+		Box::new(ord_binary),
+		Box::new(ord_linked),
+		Box::new(bin_tree),
+	];
 
 	for mut collection in boxed_collections {
 		assert_eq!(collection.size_collection(), 0);

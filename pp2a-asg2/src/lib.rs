@@ -28,5 +28,7 @@ impl Display for dyn WordCollection {
 	}
 }
 
-pub mod ord_array_binary;
-pub mod ord_array_linear;
+pub mod binary;
+pub mod linear;
+pub mod linked;
+pub mod tree;
