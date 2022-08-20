@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 pub trait WordCollection {
 	/// The creation of the various implementations of `WordCollection` won't be object safe, so we add this bound on the
 	/// `Sized` trait to mark it as explicitly unavailable to trait objects.
@@ -18,4 +20,11 @@ pub trait WordCollection {
 
 const WC_SIZE: usize = 250_000;
 
+impl Display for dyn WordCollection {
+	fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		todo!();
+	}
+}
+
+pub mod ord_array_binary;
 pub mod ord_array_linear;
