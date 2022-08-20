@@ -1,5 +1,6 @@
 use std::fmt::Display;
 
+/// A collection of words that has various implementations, each of which will be benchmarked against the others.
 pub trait WordCollection {
 	/// The creation of the various implementations of `WordCollection` won't be object safe, so we add this bound on the
 	/// `Sized` trait to mark it as explicitly unavailable to trait objects.
@@ -18,6 +19,7 @@ pub trait WordCollection {
 	fn display_collection(&self);
 }
 
+/// The default capacity of a new `WordCollection`.
 const WC_SIZE: usize = 250_000;
 
 impl Display for dyn WordCollection {
