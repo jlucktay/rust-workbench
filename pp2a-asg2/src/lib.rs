@@ -31,9 +31,9 @@ pub struct OrderedLinearArray {
 }
 
 impl WordCollection for OrderedLinearArray {
-	/// Initialises the `OrderedLinearArray` implementation of `WordCollection` and returns it.
+	/// Initialises the `OrderedLinearArray` implementation of `WordCollection` with a default capacity of `WC_SIZE`.
 	fn make_collection() -> Self {
-		Self { words: Vec::new() }
+		Self::default()
 	}
 
 	/// Adds the word to the `WordCollection`.
