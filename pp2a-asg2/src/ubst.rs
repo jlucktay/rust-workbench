@@ -1,34 +1,25 @@
-use std::fmt::Display;
+extern crate binary_search_tree;
+use binary_search_tree::BinarySearchTree;
 
 use crate::WordCollection;
 
 /// `UnbalancedBinarySearchTree` is an unbalanced binary search tree with binary insert and search.
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub struct UnbalancedBinarySearchTree {}
+pub type UnbalancedBinarySearchTree = BinarySearchTree<String>;
 
 impl WordCollection for UnbalancedBinarySearchTree {
-	fn new() -> Self
-	where
-		Self: Sized,
-	{
-		todo!()
+	fn new() -> Self {
+		unimplemented!()
 	}
 
-	fn add(&mut self, _word: &str) {
-		todo!()
+	fn add(&mut self, word: &str) {
+		self.insert(word.to_string());
 	}
 
-	fn search(&self, _word: &str) -> bool {
-		todo!()
+	fn search(&self, word: &str) -> bool {
+		self.contains(&word.to_string())
 	}
 
 	fn size(&self) -> usize {
-		todo!()
-	}
-}
-
-impl Display for UnbalancedBinarySearchTree {
-	fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		todo!()
+		self.size
 	}
 }
