@@ -1,34 +1,29 @@
 use std::fmt::Display;
 
 /// A collection of words that has various implementations, each of which will be benchmarked against the others.
-pub trait WordCollection {
+pub trait WordCollection
+where
+	Self: Display,
+{
 	/// The creation of the various implementations of `WordCollection` won't be object safe, so we add this bound on the
 	/// `Sized` trait to mark it as explicitly unavailable to trait objects.
 	///
 	/// Further reading [here](https://doc.rust-lang.org/error-index.html#method-references-the-self-type-in-its-parameters-or-return-type).
-	fn make_collection() -> Self
+	fn new() -> Self
 	where
 		Self: Sized;
 
-	fn add_collection(&mut self, word: &str);
+	fn add(&mut self, word: &str);
 
-	fn search_collection(&self, word: &str) -> bool;
+	fn search(&self, word: &str) -> bool;
 
-	fn size_collection(&self) -> usize;
-
-	fn display_collection(&self);
+	fn size(&self) -> usize;
 }
 
 /// The default capacity of a new `WordCollection`.
 const WC_SIZE: usize = 250_000;
 
-impl Display for dyn WordCollection {
-	fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		todo!();
-	}
-}
-
 pub mod binary;
 pub mod linear;
 pub mod linked;
-pub mod tree;
+pub mod ubst;

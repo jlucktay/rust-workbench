@@ -14,13 +14,13 @@ pub struct OrderedBinaryArray {
 
 impl WordCollection for OrderedBinaryArray {
 	/// Initialises the `OrderedBinaryArray` implementation of `WordCollection` with a default capacity of `WC_SIZE`.
-	fn make_collection() -> Self {
+	fn new() -> Self {
 		Self::default()
 	}
 
 	/// Adds the word to the `WordCollection`.
 	/// The word is added so that the `WordCollection` is in alphabetical order.
-	fn add_collection(&mut self, word: &str) {
+	fn add(&mut self, word: &str) {
 		let i = self
 			.words
 			.iter()
@@ -32,18 +32,13 @@ impl WordCollection for OrderedBinaryArray {
 
 	/// Searches for the word in the `WordCollection`.
 	/// This utilises a binary search algorithm.
-	fn search_collection(&self, word: &str) -> bool {
+	fn search(&self, word: &str) -> bool {
 		self.words.binary_search(&word.to_string()).is_ok()
 	}
 
 	/// Returns the number of words in the `WordCollection`.
-	fn size_collection(&self) -> usize {
+	fn size(&self) -> usize {
 		self.words.len()
-	}
-
-	/// Prints the contents of the `WordCollection` to standard output.
-	fn display_collection(&self) {
-		println!("{}", self);
 	}
 }
 

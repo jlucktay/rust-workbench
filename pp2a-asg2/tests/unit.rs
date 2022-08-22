@@ -1,6 +1,6 @@
 use pp2a_asg2::{
 	binary::OrderedBinaryArray, linear::OrderedLinearArray, linked::OrderedLinkedList,
-	tree::UnbalancedBinarySearchTree, WordCollection,
+	ubst::UnbalancedBinarySearchTree, WordCollection,
 };
 
 const NAMES: [&str; 8] = [
@@ -21,10 +21,10 @@ Element #8:	Wade
 
 	assert_eq!(NAMES.len(), 8);
 
-	let ord_linear = OrderedLinearArray::default();
-	let ord_binary = OrderedBinaryArray::default();
-	let ord_linked = OrderedLinkedList::make_collection();
-	let bin_tree = UnbalancedBinarySearchTree::make_collection();
+	let ord_linear = OrderedLinearArray::new();
+	let ord_binary = OrderedBinaryArray::new();
+	let ord_linked = OrderedLinkedList::new();
+	let bin_tree = UnbalancedBinarySearchTree::new();
 
 	let boxed_collections: Vec<Box<dyn WordCollection>> = vec![
 		Box::new(ord_linear),
@@ -34,20 +34,24 @@ Element #8:	Wade
 	];
 
 	for mut collection in boxed_collections {
-		assert_eq!(collection.size_collection(), 0);
+		assert_eq!(collection.size(), 0);
 
 		for name in NAMES {
-			collection.add_collection(name);
+			collection.add(name);
 		}
 
-		assert_eq!(collection.size_collection(), 8);
+		assert_eq!(collection.size(), 8);
 
-		println!("The following names are in the Collection:");
-		collection.display_collection();
+		let actual_output = collection.to_string();
 
-		assert_eq!(EXPECTED_OUTPUT, collection.to_string());
+		println!(
+			"The following names are in the Collection:\n{}",
+			actual_output
+		);
 
-		assert!(collection.search_collection("Sathish"));
-		assert!(!collection.search_collection("Kratos"));
+		assert_eq!(EXPECTED_OUTPUT, actual_output);
+
+		assert!(collection.search("Sathish"));
+		assert!(!collection.search("Kratos"));
 	}
 }

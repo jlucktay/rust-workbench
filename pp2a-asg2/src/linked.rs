@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::WordCollection;
 
 /// `OrderedLinkedList` is an ordered linked list with linear insert and search.
@@ -9,26 +11,28 @@ use crate::WordCollection;
 pub struct OrderedLinkedList {}
 
 impl WordCollection for OrderedLinkedList {
-	fn make_collection() -> Self
+	fn new() -> Self
 	where
 		Self: Sized,
 	{
 		todo!()
 	}
 
-	fn add_collection(&mut self, _word: &str) {
+	fn add(&mut self, _word: &str) {
 		todo!()
 	}
 
-	fn search_collection(&self, _word: &str) -> bool {
+	fn search(&self, _word: &str) -> bool {
 		todo!()
 	}
 
-	fn size_collection(&self) -> usize {
+	fn size(&self) -> usize {
 		todo!()
 	}
+}
 
-	fn display_collection(&self) {
+impl Display for OrderedLinkedList {
+	fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		todo!()
 	}
 }
