@@ -31,3 +31,12 @@ pub mod binary;
 pub mod linear;
 pub mod linked;
 pub mod ubst;
+
+#[inline]
+#[must_use]
+pub fn fibonacci(n: u64) -> u64 {
+	match n {
+		0 | 1 => 1,
+		n => fibonacci(n - 1) + fibonacci(n - 2),
+	}
+}
