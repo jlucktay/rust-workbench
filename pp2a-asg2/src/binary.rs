@@ -59,10 +59,18 @@ impl OrderedBinaryArray {
 /// Implementing Display automatically gives you `.to_string()` and a bunch of other goodies.
 impl Display for OrderedBinaryArray {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		for (i, word) in self.words.iter().enumerate() {
-			f.write_fmt(format_args!("Element #{}:\t{}\n", i + 1, word))?;
+		f.write_str("[")?;
+
+		let mut words = self.words.iter().peekable();
+
+		while let Some(word) = words.next() {
+			f.write_fmt(format_args!("\"{}\"", word))?;
+
+			if words.peek().is_some() {
+				f.write_str(", ")?;
+			}
 		}
 
-		Ok(())
+		f.write_str("]")
 	}
 }

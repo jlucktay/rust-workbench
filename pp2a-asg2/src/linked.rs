@@ -51,13 +51,18 @@ impl WordCollection for OrderedLinkedList {
 
 impl Display for OrderedLinkedList {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut i = 1;
+		f.write_str("[")?;
 
-		for word in &self.ll {
-			f.write_fmt(format_args!("Element #{}:\t{}\n", i, word))?;
-			i += 1;
+		let mut words = self.ll.iter().peekable();
+
+		while let Some(word) = words.next() {
+			f.write_fmt(format_args!("\"{}\"", word))?;
+
+			if words.peek().is_some() {
+				f.write_str(", ")?;
+			}
 		}
 
-		Ok(())
+		f.write_str("]")
 	}
 }

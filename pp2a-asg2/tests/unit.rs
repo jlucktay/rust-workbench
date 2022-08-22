@@ -9,15 +9,9 @@ const NAMES: [&str; 8] = [
 
 #[test]
 fn driver() {
-	const EXPECTED_OUTPUT: &str = r#"Element #1:	Don
-Element #2:	Indrajit
-Element #3:	Kevin
-Element #4:	Peter
-Element #5:	Rahul
-Element #6:	Sam
-Element #7:	Sathish
-Element #8:	Wade
-"#;
+	// The output should be sorted in alphabetical order.
+	const EXPECTED_OUTPUT: &str =
+		r#"["Don", "Indrajit", "Kevin", "Peter", "Rahul", "Sam", "Sathish", "Wade"]"#;
 
 	assert_eq!(NAMES.len(), 8);
 
