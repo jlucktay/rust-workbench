@@ -19,7 +19,7 @@ impl WordCollection for OrderedBinaryArray {
 	}
 
 	/// Adds the word to the `WordCollection`.
-	/// The word is added so that the `WordCollection` is in alphabetical order.
+	/// The word is added so that the `WordCollection` is kept in alphabetical order at all times.
 	fn add(&mut self, word: &str) {
 		let i = self
 			.words

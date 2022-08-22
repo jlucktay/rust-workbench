@@ -13,10 +13,14 @@ where
 	where
 		Self: Sized;
 
+	/// Adds the word to the `WordCollection`.
+	/// The word is added so that the `WordCollection` is kept in alphabetical order at all times.
 	fn add(&mut self, word: &str);
 
+	/// Searches for the word in the `WordCollection`.
 	fn search(&self, word: &str) -> bool;
 
+	/// Returns the number of words in the `WordCollection`.
 	fn size(&self) -> usize;
 }
 

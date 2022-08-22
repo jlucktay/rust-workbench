@@ -24,8 +24,8 @@ impl WordCollection for OrderedLinkedList {
 		}
 	}
 
-	// Adds the string to the `WordCollection`.
-	// The string is added so that the `WordCollection` is in alphabetical order at all times.
+	/// Adds the string to the `WordCollection`.
+	/// The word is added so that the `WordCollection` is kept in alphabetical order at all times.
 	fn add(&mut self, word: &str) {
 		self.ll.push_front(word.to_string());
 
@@ -37,8 +37,8 @@ impl WordCollection for OrderedLinkedList {
 		self.ll = temporary.into_iter().collect();
 	}
 
-	// Searches for the word in the `WordCollection`.
-	// This utilises a linear search algorithm.
+	/// Searches for the word in the `WordCollection`.
+	/// This utilises a linear search algorithm.
 	fn search(&self, word: &str) -> bool {
 		self.ll.contains(&word.to_string())
 	}
