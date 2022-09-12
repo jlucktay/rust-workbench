@@ -1,14 +1,24 @@
 use {
+	clap::Parser,
 	reqwest::{ClientBuilder, Result},
 	std::time::Duration,
 };
 
 const VERSION: Option<&str> = option_env!("CARGO_PKG_VERSION");
 
+/// Simple program to look up a user through a web API
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+	/// User to look up on GitHub
+	#[clap(short, long, value_parser)]
+	user: String,
+}
+
 #[tokio::main]
 async fn main() -> Result<()> {
-	let user = "jlucktay";
-	let request_url = format!("https://api.github.com/users/{}", user);
+	let args = Args::parse();
+	let request_url = format!("https://api.github.com/users/{}", args.user);
 	println!("{}", request_url);
 
 	let timeout = Duration::new(5, 0);
@@ -23,9 +33,9 @@ async fn main() -> Result<()> {
 	println!("response.status(): {:?}", response.status());
 
 	if response.status().is_success() {
-		println!("{} is a user!", user);
+		println!("{} is a user!", args.user);
 	} else {
-		println!("{} is not a user!", user);
+		println!("{} is not a user!", args.user);
 	}
 
 	Ok(())
