@@ -1,7 +1,10 @@
 use {
 	clap::Parser,
 	reqwest::{ClientBuilder, Result},
-	std::time::Duration,
+	std::{
+		hash::{Hash, Hasher},
+		time::Duration,
+	},
 };
 
 const VERSION: Option<&str> = option_env!("CARGO_PKG_VERSION");
@@ -13,6 +16,14 @@ struct Args {
 	/// User to look up on GitHub
 	#[clap(short, long, value_parser)]
 	user: String,
+}
+
+/// [Further reading](https://www.reddit.com/r/rust/comments/xmc91c/comment/ipnsjxr).
+impl Hash for Args {
+	fn hash<H: Hasher>(&self, state: &mut H) {
+		let Self { user: _ } = self;
+		self.user.hash(state);
+	}
 }
 
 #[tokio::main]
