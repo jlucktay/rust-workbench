@@ -2,10 +2,12 @@ use axum::{extract::Path, response::Html, routing::get, Router};
 use minijinja::render;
 use serde::Serialize;
 
+#[allow(clippy::unused_async)]
 async fn home() -> Html<&'static str> {
 	Html("hello world")
 }
 
+#[allow(clippy::unused_async)]
 async fn get_profile(Path(profile_name): Path<String>) -> Html<String> {
 	let orders_example = vec![
 		Items {
@@ -30,7 +32,9 @@ async fn main() {
 	let app = Router::new()
 		.route("/", get(home))
 		.route("/:profile_name", get(get_profile));
+
 	// run it with hyper on localhost:3000
+	#[allow(clippy::unwrap_used)]
 	axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
 		.serve(app.into_make_service())
 		.await
