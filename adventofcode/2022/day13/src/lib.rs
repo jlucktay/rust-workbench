@@ -62,7 +62,7 @@ impl Default for Node {
 }
 
 #[must_use]
-pub fn part1(input: &str) -> usize {
+pub fn part1(input: &str, verbose: bool) -> usize {
 	let mut sum = 0;
 
 	for (i, groups) in input.split("\n\n").enumerate() {
@@ -76,20 +76,22 @@ pub fn part1(input: &str) -> usize {
 
 		let result = l < r;
 
-		println!("== Pair {i} ==");
-		println!("- Compare {l:?} vs {r:?}");
+		if verbose {
+			println!("== Pair {i} ==");
+			println!("- Compare {l:?} vs {r:?}");
 
-		if result {
-			println!("  - {}", Colour::Green.paint("in the right order"));
-		} else {
-			println!(
-				"  - {} {}",
-				Style::new().reverse().paint("not"),
-				Colour::Red.paint("in the right order")
-			);
+			if result {
+				println!("  - {}", Colour::Green.paint("in the right order"));
+			} else {
+				println!(
+					"  - {} {}",
+					Style::new().reverse().paint("not"),
+					Colour::Red.paint("in the right order")
+				);
+			}
+
+			println!();
 		}
-
-		println!();
 
 		if result {
 			sum += i;
@@ -99,13 +101,43 @@ pub fn part1(input: &str) -> usize {
 	sum
 }
 
+#[must_use]
+pub fn part2(input: &str) -> usize {
+	let dividers = vec![
+		Node::List(vec![Node::Number(2)]),
+		Node::List(vec![Node::Number(6)]),
+	];
+
+	let mut packets = input
+		.lines()
+		.filter(|s| !s.is_empty())
+		.map(|line| serde_json::from_str::<Node>(line).unwrap_or_default())
+		.chain(dividers.iter().cloned())
+		.collect::<Vec<_>>();
+
+	packets.sort();
+
+	let decoder_key = dividers
+		.iter()
+		.map(|d| packets.binary_search(d).unwrap_or_default() + 1)
+		.product::<usize>();
+
+	decoder_key
+}
+
 #[cfg(test)]
 mod tests {
 	use super::*;
 
 	#[test]
 	fn part1_works() {
-		let result = part1(include_str!("sample-input.txt"));
+		let result = part1(include_str!("sample-input.txt"), true);
 		assert_eq!(result, 13);
+	}
+
+	#[test]
+	fn part2_works() {
+		let result = part2(include_str!("sample-input.txt"));
+		assert_eq!(result, 140);
 	}
 }
