@@ -1,0 +1,28 @@
+[package]
+name = "day14"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# You can specifiy the types of derives that you need for less time spent compiling.
+# For the full list of features see this crate its Cargo.toml.
+derive_more = { version = "0.99.17", default-features = false, features = [
+  "add_assign",
+  "add",
+  "from",
+  "iterator",
+] }
+js-sys = "0.3.60"
+wasm-bindgen = "0.2"
+web-sys = { version = "0.3.60", features = [
+  "CanvasRenderingContext2d",
+  "Document",
+  "Element",
+  "HtmlCanvasElement",
+  "Window",
+] }
+
+[lib]
+crate-type = ["lib", "cdylib"]
