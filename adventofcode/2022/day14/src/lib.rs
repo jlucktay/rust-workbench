@@ -2,7 +2,8 @@
 #![feature(generators)]
 #![feature(iter_from_generator)]
 
-use wasm_bindgen::{prelude::*, JsCast};
+use wasm_bindgen::{prelude::*, Clamped, JsCast};
+use web_sys::ImageData;
 
 #[derive(
 	Debug, Clone, Copy, PartialEq, Eq, derive_more::Add, derive_more::AddAssign, derive_more::Sub,
@@ -113,6 +114,23 @@ impl Grid {
 			.dyn_into::<web_sys::CanvasRenderingContext2d>()
 			.unwrap();
 
+		let mut pixels = vec![0u8; 4 * self.width * self.height];
+		#[allow(clippy::identity_op)]
+		for y in 0..self.height {
+			for x in 0..self.width {
+				let base_index = 4 * (y * self.width + x);
+				pixels[base_index + 0] = 255;
+				pixels[base_index + 1] = 20;
+				pixels[base_index + 2] = 20;
+				pixels[base_index + 3] = 255;
+			}
+		}
+
+		let air_color: [u8; 3] = [77, 180, 227];
+		let rock_color: [u8; 3] = [51, 48, 45];
+		let sand_color: [u8; 3] = [130, 127, 88];
+		let current_color: [u8; 3] = [245, 206, 49];
+
 		for y in 0..self.height {
 			for x in 0..self.width {
 				let point = Point {
@@ -123,35 +141,67 @@ impl Grid {
 				let cell = self.cell(point).unwrap();
 
 				let color = match cell {
-					Cell::Air => "#4db4e3",
-					Cell::Rock => "#33302d",
-					Cell::Sand => "#827f58",
+					Cell::Air => &air_color,
+					Cell::Rock => &rock_color,
+					Cell::Sand => &sand_color,
 				};
 
-				context.set_fill_style(&JsValue::from_str(color));
-				context.fill_rect(x as _, y as _, 1.0, 1.0);
+				let base_index = 4 * (y * self.width + x);
+				pixels[base_index] = color[0];
+				pixels[base_index + 1] = color[1];
+				pixels[base_index + 2] = color[2];
 			}
 		}
+
+		for grain in self.grains.iter().copied() {
+			let Point { x, y } = grain - self.origin;
+
+			let color = &current_color;
+			let base_index = 4 * (y as usize * self.width + x as usize);
+			pixels[base_index] = color[0];
+			pixels[base_index + 1] = color[1];
+			pixels[base_index + 2] = color[2];
+		}
+
+		let imagedata =
+			ImageData::new_with_u8_clamped_array(Clamped(&pixels[..]), self.width as _).unwrap();
+		context.put_image_data(&imagedata, 0.0, 0.0).unwrap();
 	}
 
 	/// # Panics
 	pub fn parse(input: &str) -> Self {
-		let polylines: Vec<_> = input.lines().map(Polyline::parse).collect();
+		let mut polylines: Vec<_> = input.lines().map(Polyline::parse).collect();
 
 		let (mut min_x, mut min_y, mut max_x, mut max_y) = (i32::MAX, i32::MAX, i32::MIN, i32::MIN);
-
-		let sand_spawn = Point { x: 500, y: 0 };
 
 		for point in polylines
 			.iter()
 			.flat_map(|p| p.points.iter())
-			.chain(std::iter::once(&sand_spawn))
+			.chain(std::iter::once(&SPAWN_POINT))
 		{
 			min_x = min_x.min(point.x);
 			min_y = min_y.min(point.y);
 			max_x = max_x.max(point.x);
 			max_y = max_y.max(point.y);
 		}
+
+		let floor_y = max_y + 2;
+		let min_x = 300;
+		let max_x = 700;
+		max_y = floor_y;
+
+		polylines.push(Polyline {
+			points: vec![
+				Point {
+					x: min_x,
+					y: floor_y,
+				},
+				Point {
+					x: max_x,
+					y: floor_y,
+				},
+			],
+		});
 
 		dbg!(min_x, max_x);
 		dbg!(min_y, max_y);
@@ -210,6 +260,10 @@ impl Grid {
 	/// # Panics
 	#[wasm_bindgen]
 	pub fn step(&mut self) {
+		if matches!(self.cell(SPAWN_POINT).unwrap(), Cell::Sand) {
+			return;
+		}
+
 		let mut grains = std::mem::take(&mut self.grains);
 		let _ = grains
 			.drain_filter(|grain| {
