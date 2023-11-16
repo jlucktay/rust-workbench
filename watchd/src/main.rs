@@ -30,7 +30,7 @@ impl Hash for Args {
 async fn main() -> Result<()> {
 	let args = Args::parse();
 	let request_url = format!("https://api.github.com/users/{}", args.user);
-	println!("{}", request_url);
+	println!("{request_url}");
 
 	let timeout = Duration::new(5, 0);
 	let user_agent = format!("watchd/{}", VERSION.unwrap_or("unknown"));
@@ -40,7 +40,7 @@ async fn main() -> Result<()> {
 		.build()?;
 	let response = client.head(&request_url).send().await?;
 
-	println!("response: {:?}", response);
+	println!("response: {response:?}");
 	println!("response.status(): {:?}", response.status());
 
 	if response.status().is_success() {

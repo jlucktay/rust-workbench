@@ -6,7 +6,7 @@ fn main() {
 
 	let is_true = Bool::True;
 	let is_false = Bool::False;
-	println!("{:?}", is_true);
+	println!("{is_true:?}");
 	let are_same = is_true == is_false;
 	let not_true = is_true.neg();
 
